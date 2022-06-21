@@ -20,5 +20,7 @@ namespace Business.Constans
         public static string UserAlreadyExits = "Bu Kullanıcı mevcut";
 
         public static string CompanyAlreadyExists = "Bu şirket daha önce kaydedilmiş.";
+
+        public static string MailParameterAdded = "Mail parametreleri başarıyla eklendi";
     }
 }

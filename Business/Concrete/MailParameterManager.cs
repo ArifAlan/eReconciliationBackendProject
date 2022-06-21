@@ -1,5 +1,9 @@
 ﻿using Business.Abstract;
+using Business.Constans;
+using Core.Utilities.Results.Abstract;
+using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +20,31 @@ namespace Business.Concrete
         {
             _mailParameterDal = mailParameterDal;
         }
+
+        public IResult Update(MailParameter mailParameter)
+        {
+            var result = Get(mailParameter.CompanyId);
+            if (result.Data==null)
+            {
+                _mailParameterDal.Add(mailParameter);
+            }
+            else
+            {
+                result.Data.SMTP = mailParameter.SMTP;
+                result.Data.Port=mailParameter.Port;    
+                result.Data.SSL= mailParameter.SSL; 
+                result.Data.Email= mailParameter.Email; 
+                result.Data.Password= mailParameter.Password;
+                _mailParameterDal.Update(mailParameter);
+            }
+            return new SuccessResult(Messages.MailParameterAdded);
+        }
+
+        public IDataResult<MailParameter> Get(int companyId)
+        {
+            return new SuccessDataResult<MailParameter>(_mailParameterDal.Get(m => m.CompanyId == companyId));
+        }
+
+       
     }
 }

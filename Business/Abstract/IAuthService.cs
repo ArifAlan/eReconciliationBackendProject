@@ -13,7 +13,7 @@ namespace Business.Abstract
 {
     public interface IAuthService
     {
-        IDataResult<UserCompanyRegisterDto> Register(UserForRegister userForRegister, string password, Company company);
+        IDataResult<UserCompanyDto> Register(UserForRegister userForRegister, string password, Company company);
 
         IDataResult<User> RegisterSecondAccount(UserForRegister userForRegister, string password);
 

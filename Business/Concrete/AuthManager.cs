@@ -32,7 +32,7 @@ namespace Business.Concrete
         {
             var result = _companyService.CompanyExists(company);
 
-            if (result != null)
+            if (result.Success ==false)
             {
                 return new ErrorResult(Messages.CompanyAlreadyExists);
             }
@@ -60,7 +60,7 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(userToCheck,Messages.SuccessfulLogin);
         }
 
-        public IDataResult<UserCompanyRegisterDto> Register(UserForRegister userForRegister, string password, Company company)
+        public IDataResult<UserCompanyDto> Register(UserForRegister userForRegister, string password, Company company)
         {
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(password, out passwordHash,out passwordSalt);
@@ -81,7 +81,7 @@ namespace Business.Concrete
 
             _companyService.UserCompanyAdd(user.Id, company.Id);
 
-            UserCompanyRegisterDto userCompanyDto = new UserCompanyRegisterDto()
+            UserCompanyDto userCompanyDto = new UserCompanyDto()
             {
                 Id = user.Id,
                 Name = user.Name,
@@ -95,7 +95,7 @@ namespace Business.Concrete
                 PasswordSalt=user.PasswordSalt
             };
 
-            return new SuccessDataResult<UserCompanyRegisterDto>(userCompanyDto, Messages.UserForRegistered);
+            return new SuccessDataResult<UserCompanyDto>(userCompanyDto, Messages.UserForRegistered);
         }
 
         public IDataResult<User> RegisterSecondAccount(UserForRegister userForRegister, string password)

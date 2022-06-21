@@ -18,21 +18,21 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(UserCompanyRegisterDto userCompanyRegisterDto)
+        public IActionResult Register(UserAndCompanyRegisterDto userAndCompanyRegister)
         {
-            var userExists = _authService.UserExists(userCompanyRegisterDto.UserForRegister);//user var mı diye kontrol ediyor.
+            var userExists = _authService.UserExists(userAndCompanyRegister.userForRegister.Email);//user var mı diye kontrol ediyor.
             if (!userExists.Success)
             {
                 return BadRequest(userExists.Message);
             }
 
-            var companyExists = _authService.CompanyExists(userCompanyRegisterDto.company);
+            var companyExists = _authService.CompanyExists(userAndCompanyRegister.Company);
             if (!companyExists.Success)
             {
                 return BadRequest(companyExists.Message);
             }
            
-            var registerResult = _authService.Register(userForRegister, userForRegister.Password,company);
+            var registerResult = _authService.Register(userAndCompanyRegister.userForRegister, userAndCompanyRegister.userForRegister.Password, userAndCompanyRegister.Company);
              var result = _authService.CreateAccessToken(registerResult.Data,registerResult.Data.CompanyId);
             if (result.Success)
             {

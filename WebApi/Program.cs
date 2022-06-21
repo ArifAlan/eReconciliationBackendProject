@@ -25,7 +25,7 @@ builder.Services.AddCors(options =>
         builder => builder.WithOrigins("https://localhost:44395"));
 });
 
-var tokenOptions = configuration.GetSection("okenOptions").Get<TokenOptions>();
+var tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
