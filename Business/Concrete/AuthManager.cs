@@ -20,12 +20,18 @@ namespace Business.Concrete
         private readonly IUserService _userService;
         private readonly ITokenHelper _tokenHelper;
         private readonly ICompanyService _companyService;
+        private readonly IMailService _mailService;
+        private readonly IMailParameterService _mailParameterService;
 
-        public AuthManager(IUserService userService, ITokenHelper tokenHelper, ICompanyService companyService)
+
+        public AuthManager(IUserService userService, ITokenHelper tokenHelper, ICompanyService companyService,
+            IMailService mailService, IMailParameterService mailParameterService)
         {
             _userService = userService;
             _tokenHelper = tokenHelper;
-            _companyService = companyService;   
+            _companyService = companyService;
+            _mailService = mailService;
+            _mailParameterService = mailParameterService;
         }
 
         public IResult CompanyExists(Company company)
@@ -94,6 +100,7 @@ namespace Business.Concrete
                 PasswordHash=user .PasswordHash,  
                 PasswordSalt=user.PasswordSalt
             };
+            
 
             return new SuccessDataResult<UserCompanyDto>(userCompanyDto, Messages.UserForRegistered);
         }
