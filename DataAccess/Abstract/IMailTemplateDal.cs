@@ -1,5 +1,5 @@
-﻿using Core.Utilities.Results.Abstract;
-using Entities.Dtos;
+﻿using Core.DataAccess;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface IMailDal
+    public interface IMailTemplateDal:IEntityRepository<MailTemplate>
     {
-        void SendMail(SendMailDto sendMailDto);
     }
 }

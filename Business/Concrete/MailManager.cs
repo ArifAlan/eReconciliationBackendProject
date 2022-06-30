@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constans;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -23,7 +24,7 @@ namespace Business.Concrete
         public IResult SendMail(SendMailDto sendMailDto)
         {
             _mailDal.SendMail(sendMailDto);
-            return new SuccessResult("Mail başarıyla göderildi");
+            return new SuccessResult(Messages.MailSendSucessful);
         }
     }
 }

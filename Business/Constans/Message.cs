@@ -22,5 +22,13 @@ namespace Business.Constans
         public static string CompanyAlreadyExists = "Bu şirket daha önce kaydedilmiş.";
 
         public static string MailParameterAdded = "Mail parametreleri başarıyla eklendi";
+
+        public static string MailSendSucessful = "Mail başarıyla göderildi";
+
+        public static string MailTemplateAdded = " MailTemplate başarıyla eklendi";
+
+        public static string MailTemplateUpdated = "MailTemplate güncellendi";
+
+        public static string MailTemplateDeleted = "MailTemplate silindi";
     }
 }

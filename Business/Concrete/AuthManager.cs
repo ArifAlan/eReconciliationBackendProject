@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constans;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Hashing;
 using Core.Utilities.Results.Abstract;
@@ -7,6 +9,7 @@ using Core.Utilities.Results.Concrete;
 using Core.Utilities.Security.JWT;
 using Entities.Concrete;
 using Entities.Dtos;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,16 +25,18 @@ namespace Business.Concrete
         private readonly ICompanyService _companyService;
         private readonly IMailService _mailService;
         private readonly IMailParameterService _mailParameterService;
+        private readonly IMailTemplateService _mailTemplateService;
 
 
         public AuthManager(IUserService userService, ITokenHelper tokenHelper, ICompanyService companyService,
-            IMailService mailService, IMailParameterService mailParameterService)
+            IMailService mailService, IMailParameterService mailParameterService, IMailTemplateService mailTemplateService)
         {
             _userService = userService;
             _tokenHelper = tokenHelper;
             _companyService = companyService;
             _mailService = mailService;
             _mailParameterService = mailParameterService;
+            _mailTemplateService = mailTemplateService;
         }
 
         public IResult CompanyExists(Company company)
@@ -68,6 +73,8 @@ namespace Business.Concrete
 
         public IDataResult<UserCompanyDto> Register(UserForRegister userForRegister, string password, Company company)
         {
+
+
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(password, out passwordHash,out passwordSalt);
             var user = new User()
@@ -81,6 +88,10 @@ namespace Business.Concrete
                 PasswordSalt = passwordSalt,
                 Name = userForRegister.Name,    
             };
+
+            
+            
+
             _userService.Add(user);
 
             _companyService.Add(company);
@@ -100,7 +111,30 @@ namespace Business.Concrete
                 PasswordHash=user .PasswordHash,  
                 PasswordSalt=user.PasswordSalt
             };
-            
+            string subject = "Kullanıcı Onay Maili";
+            string body = "Kullanıcı sisteme kayıt oldu.Kaydınızı tanımlamak için  aşağıdaki linke tıklamanız gerekmektedir.";
+            string link = "https://localhost:4200";
+            string linkDescription = "Kaydı Onaylamak için tıklayınız";
+
+            var mailTemplate = _mailTemplateService.GetByTemplateName("Kayıt", 2002);
+            string templateBody = mailTemplate.Data.Value;
+            templateBody = templateBody.Replace("{{title}}", subject);
+            templateBody = templateBody.Replace("{{message}}", body);
+            templateBody = templateBody.Replace("{{link}}", link);
+            templateBody = templateBody.Replace("{{linkDescription}}", linkDescription);
+
+
+
+
+            var mailParameter = _mailParameterService.Get(2002);
+            SendMailDto sendMailDto = new SendMailDto()
+            {
+                mailParameter = mailParameter.Data,
+                email = user.Email,
+                subject="Kullanıcı kayıt onay maili",
+                body= templateBody
+            };
+            _mailService.SendMail(sendMailDto);
 
             return new SuccessDataResult<UserCompanyDto>(userCompanyDto, Messages.UserForRegistered);
         }
