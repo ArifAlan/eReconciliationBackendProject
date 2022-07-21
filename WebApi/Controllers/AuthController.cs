@@ -85,5 +85,12 @@ namespace WebApi.Controllers
             }
             return BadRequest(result.Message);
         }
+
+        [HttpGet("confirmuser")]
+
+        public IActionResult ConfirmUser(string value)
+        {
+            return Ok();
+        }
     }
 }

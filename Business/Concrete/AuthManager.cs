@@ -113,10 +113,10 @@ namespace Business.Concrete
             };
             string subject = "Kullanıcı Onay Maili";
             string body = "Kullanıcı sisteme kayıt oldu.Kaydınızı tanımlamak için  aşağıdaki linke tıklamanız gerekmektedir.";
-            string link = "https://localhost:4200";
+            string link = "https://localhost:44395/api/Auth/confirmuser?value="+user.MailConfirmValue;
             string linkDescription = "Kaydı Onaylamak için tıklayınız";
 
-            var mailTemplate = _mailTemplateService.GetByTemplateName("Kayıt", 2002);
+            var mailTemplate = _mailTemplateService.GetByTemplateName("Kayıt", 2);
             string templateBody = mailTemplate.Data.Value;
             templateBody = templateBody.Replace("{{title}}", subject);
             templateBody = templateBody.Replace("{{message}}", body);
@@ -126,7 +126,7 @@ namespace Business.Concrete
 
 
 
-            var mailParameter = _mailParameterService.Get(2002);
+            var mailParameter = _mailParameterService.Get(2);
             SendMailDto sendMailDto = new SendMailDto()
             {
                 mailParameter = mailParameter.Data,

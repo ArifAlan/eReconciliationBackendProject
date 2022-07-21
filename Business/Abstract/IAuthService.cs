@@ -19,6 +19,8 @@ namespace Business.Abstract
 
         IDataResult<User> Login(UserForLogin userForLogin);
 
+        //IDataResult<User> Login(UserForLogin userForLogin);
+
         IResult UserExists(string email);
 
         IResult CompanyExists(Company company);
